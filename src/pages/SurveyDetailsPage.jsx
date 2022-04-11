@@ -35,8 +35,12 @@ const SurveyDetails = () => {
       );
       const data = await response.data;
 
+   
+
       setSurvey(data);
+      
       setQuestion(data.surveyQuestions);
+
       if (data) {
         setIsloading(false);
       }
@@ -135,9 +139,16 @@ const SurveyDetails = () => {
     }
   }
 
-  const filteredQuestionsArray = questions.filter(data => data!= null);
+  let filteredQuestionsArray = [] ;
+  
+  questions.filter((data,index) => {
+    if(data!= null){
+      filteredQuestionsArray.push({index,data})
+    }
+  });
 
- 
+ console.log(questionId)
+ console.log(filteredQuestionsArray)
 
   return (
     <>
@@ -200,26 +211,27 @@ const SurveyDetails = () => {
                 </div>
                 <div>
                   <div className="font-bold text-2xl pt-8 pb-2 text-left pl-8 ">
-                    {` Survey Questions (${questions.length})`}
+                    {` Survey Questions (${filteredQuestionsArray.length})`}
                   </div>
                   <div className="h[2px] bg[black]"></div>
                   {filteredQuestionsArray.map((element, index) => {
+                    
                     return (
                       <div
                         key={index}
                         className="px-8 py-2 mx-8 my-4 bg-[#CECECE] flex justify-between items-center "
                       >
-                        <div className="text-left">{element}</div>
+                        <div className="text-left">{element.data}</div>
                         <div
                           className="flex flex-row "
-                          onClick={() => openEditableModal(index)}
+                          onClick={() => openEditableModal(element.index)}
                         >
                           <div className="pr-2 mr-2 cursor-pointer">
                             <FontAwesomeIcon icon={faEdit} />
                           </div>
                           <div
                             className="cursor-pointer"
-                            onClick={() => openModalHandler(index)}
+                            onClick={() => openModalHandler(element.index)}
                           >
                             <FontAwesomeIcon icon={faRemove} color="red" />
                           </div>
